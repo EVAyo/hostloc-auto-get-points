@@ -41,7 +41,7 @@ def check_anti_cc() -> dict:
 
     if len(aes_keys) != 0:  # 开启了防CC机制
         print("检测到防 CC 机制开启！")
-        if len(aes_keys) != 3 or len(cookie_name) != 1:  # 正则表达式匹配到的参数数量不对（不正常的情况）
+        if len(aes_keys) != 3 or len(cookie_name) != 1:  # 正则表达式匹配到的参数个数不对（不正常的情况）
             result_dict["ok"] = 0
         else:  # 匹配正常时将参数存到result_dict中
             result_dict["ok"] = 1
@@ -55,25 +55,26 @@ def check_anti_cc() -> dict:
     return result_dict
 
 
-# 在开启了防CC机制时使用获取到的数据进行AES解密计算生成一条Cookie（未开启时返回空Cookies）
+# 在开启了防CC机制时使用获取到的数据进行AES解密计算生成一条Cookie（未开启防CC机制时返回空Cookies）
 def gen_anti_cc_cookies() -> dict:
     cookies = {}
     anti_cc_status = check_anti_cc()
 
-    if not anti_cc_status:  # 未开启防CC机制
-        pass
-    elif anti_cc_status["ok"] == 0:
-        print("防 CC 验证过程所需参数不符合要求，页面可能存在错误！")
-    else:  # 使用获取到的三个值进行AES Cipher-Block Chaining解密计算以生成特定的Cookie值用于通过防CC验证
-        print("执行 AES 计算尝试通过防 CC 验证")
-        a = bytes(toNumbers(anti_cc_status["a"]))
-        b = bytes(toNumbers(anti_cc_status["b"]))
-        c = bytes(toNumbers(anti_cc_status["c"]))
-        cbc_mode = AESModeOfOperationCBC(a, b)
-        result = cbc_mode.decrypt(c)
+    if anti_cc_status:  # 不为空，代表开启了防CC机制
+        if anti_cc_status["ok"] == 0:
+            print("防 CC 验证过程所需参数不符合要求，页面可能存在错误！")
+        else:  # 使用获取到的三个值进行AES Cipher-Block Chaining解密计算以生成特定的Cookie值用于通过防CC验证
+            print("执行 AES 计算尝试通过防 CC 验证")
+            a = bytes(toNumbers(anti_cc_status["a"]))
+            b = bytes(toNumbers(anti_cc_status["b"]))
+            c = bytes(toNumbers(anti_cc_status["c"]))
+            cbc_mode = AESModeOfOperationCBC(a, b)
+            result = cbc_mode.decrypt(c)
 
-        name = anti_cc_status["cookie_name"]
-        cookies[name] = result.hex()
+            name = anti_cc_status["cookie_name"]
+            cookies[name] = result.hex()
+    else:
+        pass
 
     return cookies
 
