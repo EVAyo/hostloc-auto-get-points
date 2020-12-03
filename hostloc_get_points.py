@@ -14,14 +14,14 @@ def randomly_gen_uspace_url() -> list:
     url_list = []
     # 访问小黑屋用户空间不会获得积分、生成的随机数可能会重复，这里多生成两个链接用作冗余
     for i in range(12):
-        uid = random.randint(10000, 45000)
+        uid = random.randint(10000, 50000)
         url = "https://www.hostloc.com/space-uid-{}.html".format(str(uid))
         url_list.append(url)
     return url_list
 
 
-# 使用Python实现的防CC验证页面中JS写的的toNumbers函数
-def toNumbers(secret):
+# 使用Python实现防CC验证页面中JS写的的toNumbers函数
+def toNumbers(secret: str) -> list:
     text = []
     for value in textwrap.wrap(secret, 2):
         text.append(int(value, 16))
@@ -41,7 +41,7 @@ def check_anti_cc() -> dict:
 
     if len(aes_keys) != 0:  # 开启了防CC机制
         print("检测到防 CC 机制开启！")
-        if len(aes_keys) != 3 or len(cookie_name) != 1:  # 正则表达式匹配到的参数个数不对（不正常的情况）
+        if len(aes_keys) != 3 or len(cookie_name) != 1:  # 正则表达式匹配到了参数，但是参数个数不对（不正常的情况）
             result_dict["ok"] = 0
         else:  # 匹配正常时将参数存到result_dict中
             result_dict["ok"] = 1
@@ -179,7 +179,9 @@ if __name__ == "__main__":
     user_list = username.split(",")
     passwd_list = password.split(",")
 
-    if len(user_list) != len(passwd_list):
+    if not username or not password:
+        print("未检测到用户名或密码，请确保环境变量设置正确！")
+    elif len(user_list) != len(passwd_list):
         print("用户名与密码个数不匹配，请检查环境变量设置是否错漏！")
     else:
         print_my_ip()
