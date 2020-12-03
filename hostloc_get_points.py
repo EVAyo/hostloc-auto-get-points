@@ -32,7 +32,7 @@ def toNumbers(secret: str) -> list:
 def check_anti_cc() -> dict:
     result_dict = {}
     headers = {
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
     }
     home_page = "https://www.hostloc.com/forum.php"
     res = requests.get(home_page, headers=headers)
@@ -64,7 +64,7 @@ def gen_anti_cc_cookies() -> dict:
         if anti_cc_status["ok"] == 0:
             print("防 CC 验证过程所需参数不符合要求，页面可能存在错误！")
         else:  # 使用获取到的三个值进行AES Cipher-Block Chaining解密计算以生成特定的Cookie值用于通过防CC验证
-            print("执行 AES 计算尝试通过防 CC 验证")
+            print("自动模拟计算尝试通过防 CC 验证")
             a = bytes(toNumbers(anti_cc_status["a"]))
             b = bytes(toNumbers(anti_cc_status["b"]))
             c = bytes(toNumbers(anti_cc_status["c"]))
@@ -82,7 +82,7 @@ def gen_anti_cc_cookies() -> dict:
 # 登录帐户
 def login(username: str, password: str) -> req_Session:
     headers = {
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
         "origin": "https://www.hostloc.com",
         "referer": "https://www.hostloc.com/forum.php",
     }
@@ -180,7 +180,7 @@ if __name__ == "__main__":
     passwd_list = password.split(",")
 
     if not username or not password:
-        print("未检测到用户名或密码，请确保环境变量设置正确！")
+        print("未检测到用户名或密码，请检查环境变量是否设置正确！")
     elif len(user_list) != len(passwd_list):
         print("用户名与密码个数不匹配，请检查环境变量设置是否错漏！")
     else:
