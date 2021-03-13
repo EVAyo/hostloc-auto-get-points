@@ -7,6 +7,11 @@
 
 **注意：** 对 Git 和 GitHub 不熟悉的人建议通过**删除原仓库，重新 Fork** 的方式更新，不要乱点 pull request ，我已经关掉过 n 个莫名奇妙的 pull request 了。
 
+#### 2021年3月13日
+
+论坛近期配置了 www 域强制跳转到顶级域，导致无法正常获取积分，[该 pull request](https://github.com/inkuang/hostloc-auto-get-points/pull/32) 已对此进行了修复。  
+各位可以同步更新代码，或者手动将 `hostloc_get_points.py` 文件中所有的 `www.hostloc.com` 修改为 `hostloc.com` 即可解决问题。
+
 #### 2020年12月1日
 
 新增自动通过防 CC 机制验证的功能，解决了 Hostloc 开启防御时脚本无法正常使用的问题。  
